@@ -1,0 +1,5 @@
+anims/
+data/
+logs/
+gsutil/
+__pycache__/

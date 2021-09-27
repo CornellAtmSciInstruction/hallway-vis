@@ -10,11 +10,14 @@ from matplotlib.colors import ListedColormap, LinearSegmentedColormap, Normalize
 
 import matplotlib.animation as manim
 
-day = '20210922'
-hour = '18'
+# import helper module
+import tools
 
+animroot = '/scratch/EASvis/anims/'
+
+day, hour = tools.most_recent_GFS_init('t850')
 ncpath = '/scratch/EASvis/data/GFS/%s/%s/netcdf/' % (day, hour)
-animpath = '/scratch/EASvis/anims/'
+animfn = 't850_anim_%d%02dz.mp4' % (day, hour)
 
 # Define the colormaps
 norm_ref, cmap_ref = ctables.registry.get_with_steps('rainbow', -80., .5)
@@ -51,14 +54,16 @@ def anim_t8():
         plt.ion()
         plt.draw()
 
-    frames = range(0,8,1)
+    frames = range(0,100,1)
 
     #make_frame(0)
     anim = manim.FuncAnimation(f, make_frame, frames, repeat=False)
 
-    anim.save(animpath + 't8_anim_test2.mp4', fps=12, codec='h264')
+    anim.save(animfn, fps=12, codec='h264')
     plt.ion()
     plt.show()
 
-anim_t8()
+import os
+if not os.path.exists(animfn):
+   anim_t8()
 
