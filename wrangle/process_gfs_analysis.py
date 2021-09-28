@@ -1,40 +1,50 @@
 import os, sys, glob
 import shutil
+import re
 import datetime
 
 import xarray as xr
 
-arch_root = '/scratch/EASvis/data/GFS/'
+arch_root = '/scratch/EASvis/data/GFS_analysis/'
 
-def get_gribpath(day, hour):
-   return arch_root + '%s/%s/grib/' % (day, hour)
+def get_gribpath(month):
+   return arch_root + '%s/grib/' % (month, )
 
-def get_ncpath(day, hour):
-   return arch_root + '%s/%s/netcdf/' % (day, hour)
+def get_ncpath(month):
+   return arch_root + '%s/netcdf/' % (month, )
 
-def process_gfs_to_nc(day, hour):
+def process_gfs_to_nc(month):
 # {{{
-   gribpath = get_gribpath(day, hour)
-   ncpath = get_ncpath(day, hour)
+   gribpath = get_gribpath(month)
+   ncpath = get_ncpath(month)
 
    if not os.path.exists(ncpath):
       os.makedirs(ncpath)
 
    # Get list of available grib files
-   filelist = glob.glob(gribpath + '*f???')
+   filelist = glob.glob(gribpath + '*anl')
    filelist.sort()
 
    plev_vars = {'t': 850}
 
+   pattern = re.compile('gfs.(?P<date>[0-9]{8}).t(?P<hour>[0-9]{2})z')
+
    for gribfn in filelist:
+      # Extract date and hour from filename
+      mt = pattern.match(os.path.basename(gribfn))
+      if mt is None:
+         print('Filename %s is unrecognized. Skipping.' % gribfn)
+         continue
+
+      date = mt.group('date')
+      hour = mt.group('hour')
+
       #################################
       # Extract isobaric data
       #############
-      fcstep = gribfn[-3:]
-
       for v, pr in plev_vars.items():
          vname = v + '%d' % pr
-         plfn = ncpath + 'gfs.t%sz.%s.0p25.f%s.nc' % (hour, vname, fcstep)
+         plfn = ncpath + 'gfs.%s.t%sz.%s.0p25.nc' % (date, hour, vname)
 
          if not os.path.exists(plfn):
             print("Writing to %s" % plfn)
@@ -56,7 +66,7 @@ def process_gfs_to_nc(day, hour):
       # Extract precipitable water
       #############
       vname = 'pwat'
-      vfn = ncpath + 'gfs.t%sz.%s.0p25.f%s.nc' % (hour, vname, fcstep)
+      vfn = ncpath + 'gfs.%s.t%sz.%s.0p25.nc' % (date, hour, vname)
 
       if not os.path.exists(vfn):
          print("Writing to %s" % vfn)
@@ -74,10 +84,10 @@ def process_gfs_to_nc(day, hour):
          #print('Skipped %s.' % plfn)
 # }}}
 
-def clean_gribs(day, hour, days_old):
+def clean_gribs(month, days_old):
 # {{{
-   #Grib retention policy keep 00Z for 1 weeks, remove others after 3 days
-   gribpath = get_gribpath(day, hour)
+   #Grib retention policy keep all
+   gribpath = get_gribpath(month)
 
    # Confirm grib archive path exists
    if not os.path.exists(gribpath):
@@ -86,12 +96,6 @@ def clean_gribs(day, hour, days_old):
 
    # Function to decide whether to delete files
    def should_delete():
-      if days_old > 6:
-         return True
-
-      if days_old > 2 and not hour == '00':
-         return True
-
       return False
 
    if should_delete():
@@ -103,10 +107,10 @@ def clean_gribs(day, hour, days_old):
          os.rmdir(rt)
 # }}}
 
-def clean_ncs(day, hour, days_old):
+def clean_ncs(month, days_old):
 # {{{
-   ncpath = get_ncpath(day, hour)
-   #Nc retention policy keep 00Z for 2 weeks, remove others after 1 week
+   ncpath = get_ncpath(month)
+   #Nc retention policy keep all
 
    # Confirm grib archive path exists
    if not os.path.exists(ncpath):
@@ -115,12 +119,6 @@ def clean_ncs(day, hour, days_old):
 
    # Function to decide whether to delete files
    def should_delete():
-      if days_old > 13:
-         return True
-
-      if days_old > 6 and not hour == '00':
-         return True
-
       return False
 
    if should_delete():
@@ -136,7 +134,7 @@ def scan_archive():
 # {{{
    dates_avail = glob.glob(arch_root + '*')
 
-   print('Scanning archive; %d date directories present.' % len(dates_avail))
+   print('Scanning GFS analysis archive; %d month directories present.' % len(dates_avail))
 
    # Get today's date in UTC
    utc_today = datetime.datetime.now(datetime.timezone.utc).date()
@@ -146,25 +144,23 @@ def scan_archive():
       try:
          yr = int(datestr[:4])
          mn = int(datestr[4:6])
-         dy = int(datestr[6:8])
          
       except:
          print("Path %s not recognized as a date; skipping." % path)
          raise
 
       # Work out how many days old this path is
-      pathdate = datetime.date(yr, mn, dy)
+      pathdate = datetime.date(yr, mn, 1)
       days_old = (utc_today - pathdate).days
 
-      for hour in ['00', '06', '12', '18']:
-         # Process any netcdf files that need processing
-         process_gfs_to_nc(datestr, hour)
+      # Process any netcdf files that need processing
+      process_gfs_to_nc(datestr)
 
-         # Clean old grib files
-         clean_gribs(datestr, hour, days_old)
+      # Clean old grib files
+      #clean_gribs(datestr, days_old)
 
-         # Clean old netcdf files
-         clean_ncs(datestr, hour, days_old)
+      # Clean old netcdf files
+      #clean_ncs(datestr, days_old)
 # }}}
 
 scan_archive()

@@ -17,7 +17,7 @@ animroot = '/scratch/EASvis/anims/'
 
 day, hour = tools.most_recent_GFS_init('t850')
 ncpath = '/scratch/EASvis/data/GFS/%s/%s/netcdf/' % (day, hour)
-animfn = 't850_anim_%d%02dz.mp4' % (day, hour)
+animfn = animroot + 't850_anim_%d%02dz.mp4' % (day, hour)
 
 # Define the colormaps
 norm_ref, cmap_ref = ctables.registry.get_with_steps('rainbow', -80., .5)
@@ -61,7 +61,6 @@ def anim_t8():
 
     anim.save(animfn, fps=12, codec='h264')
     plt.ion()
-    plt.show()
 
 import os
 if not os.path.exists(animfn):
