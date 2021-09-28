@@ -15,9 +15,8 @@ import tools
 
 animroot = '/scratch/EASvis/anims/'
 
-day, hour = tools.most_recent_GFS_init('t850')
-ncpath = '/scratch/EASvis/data/GFS/%s/%s/netcdf/' % (day, hour)
-animfn = animroot + 't850_anim_%d%02dz.mp4' % (day, hour)
+ncpath, date, hour = tools.most_recent_GFS_init('t850')
+animfn = tools.make_anim_filename('t850', date, hour)
 
 # Define the colormaps
 norm_ref, cmap_ref = ctables.registry.get_with_steps('rainbow', -80., .5)
@@ -57,12 +56,17 @@ def anim_t8():
     frames = range(0,100,1)
 
     #make_frame(0)
+
     anim = manim.FuncAnimation(f, make_frame, frames, repeat=False)
 
+    print('Writing animation to %s.' % animfn)
+   
     anim.save(animfn, fps=12, codec='h264')
     plt.ion()
 
 import os
-if not os.path.exists(animfn):
-   anim_t8()
+if os.path.exists(animfn):
+    print('%s already exists; skipping.' % animfn)
+else:
+    anim_t8()
 

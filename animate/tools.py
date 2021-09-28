@@ -5,7 +5,7 @@ anim_root = '/scratch/EASvis/anims/'
 gfs_root = '/scratch/EASvis/data/GFS/'
 
 def most_recent_GFS_init(var):
-   ''' Returns date and hour of most recent available GFS initialization (that has been processed). '''
+   ''' Returns path (to netcdf files), date, and hour of most recent available GFS initialization (that has been processed). '''
 
    dates_avail = glob.glob(gfs_root + '????????/??/netcdf/')
    dates_avail.sort()
@@ -20,9 +20,12 @@ def most_recent_GFS_init(var):
    if i < 0: 
       raise ValueError("No GFS initilizations are available with %s processed." % var)
 
-   mr = mr.split('/')
+   mrl = mr.split('/')
    ncfiles.sort()
 
-   return int(mr[5]), int(mr[6])
+   return mr, mrl[5], mrl[6]
+
+def make_anim_filename(title, date, hour):
+   return anim_root + '%s_anim_%s_%sz.mp4' % (title, date, hour)
 
 
