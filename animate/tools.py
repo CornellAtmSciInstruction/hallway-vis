@@ -26,6 +26,14 @@ def most_recent_GFS_init(var):
    return mr, mrl[5], mrl[6]
 
 def make_anim_filename(title, date, hour):
-   return anim_root + '%s_anim_%s_%sz.mp4' % (title, date, hour)
+   ''' Returns filename to use for animation and makes path if necessary. '''
+   path = anim_root + date
+
+   if not os.path.exists(path):
+      os.makedirs(path)
+
+   return path + '/%s_anim_%s_%sz.mp4' % (title, date, hour)
 
 
+def make_anim_symlink(title):
+   return anim_root + '%s_anim_latest.mp4' % title

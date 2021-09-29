@@ -3,3 +3,7 @@ data/
 logs/
 gsutil/
 __pycache__/
+*.swp
+old_scripts/
+gamefarm_climate/StnData.csv
+gamefarm_climate/fcst.txt

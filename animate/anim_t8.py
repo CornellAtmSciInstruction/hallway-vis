@@ -14,9 +14,10 @@ import matplotlib.animation as manim
 import tools
 
 animroot = '/scratch/EASvis/anims/'
+title = 't850'
 
 ncpath, date, hour = tools.most_recent_GFS_init('t850')
-animfn = tools.make_anim_filename('t850', date, hour)
+animfn = tools.make_anim_filename(title, date, hour)
 
 # Define the colormaps
 norm_ref, cmap_ref = ctables.registry.get_with_steps('rainbow', -80., .5)
@@ -32,6 +33,7 @@ def anim_t8():
     ax = f.add_subplot(111, projection = ccrs.PlateCarree())  # Add axes to figure
 
     def make_frame(i):
+        print(i)
         plt.ioff()
         ax.cla()
         ax.coastlines(resolution='50m')
@@ -43,7 +45,7 @@ def anim_t8():
         #t8 = add_cyclic_point(t8,coord=t8.longitude)
         ax.set_extent((-157,0,0,90))
 
-        ax.contourf(t8.longitude,t8.latitude,t8,norm=newnorm,cmap=newcmap,antialiased=True,levels=range(-40,40,1),alpha=0.7,transform=ccrs.PlateCarree())
+        ax.contourf(t8.longitude,t8.latitude,t8,norm=newnorm,cmap=newcmap,levels=range(-40,40,1),alpha=0.7,transform=ccrs.PlateCarree())
         ax.contour(t8.longitude,t8.latitude,t8,levels=[0],colors=['blue'],transform=ccrs.PlateCarree())
 
         ax.set_title('850hPa Temperature (C)',fontsize=11)
@@ -69,4 +71,8 @@ if os.path.exists(animfn):
     print('%s already exists; skipping.' % animfn)
 else:
     anim_t8()
+
+lnk = tools.make_anim_symlink(title)
+if os.path.exists(lnk): os.unlink(lnk)
+os.symlink(animfn, lnk)
 

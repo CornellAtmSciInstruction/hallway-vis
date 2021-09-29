@@ -26,7 +26,7 @@ pathdate = datetime.datetime.today().strftime('%Y%m%d')
 # -- define files and path
 # pathin 		= '/Users/fl439/Dropbox/work/weather_data_ithaca/' # for testing
 # pathin 		= '/home/fl439/work/weather_data_ithaca/' # for testing
-pathin      = '/scratch/EASvis/scripts/gamefarm_climate/'
+pathin      = '/scratch/EASvis/gamefarm_climate/'
 filein1		= 'StnData.csv'
 filein2		= 'fcst.txt'
 filename1   = pathin+filein1
@@ -34,7 +34,12 @@ filename2   = pathin+filein2
 # pathout     = '/Users/fl439/Dropbox/work/weather_data_ithaca/' # for testing
 # pathout     = '/home/fl439/work/weather_data_ithaca' # for testing
 pathout     = '/scratch/EASvis/anims/'
-fileout     = 'ithaca_temperature_annual_cycle_fcst_subplots_'+pathdate+'.png'
+fileout     = pathout + pathdate + '/ithaca_temperature_annual_cycle_fcst_subplots_'+pathdate+'.png'
+linkout     = pathout + 'ithaca_temperature_annual_cycle_fcst_subplots_latest.png'
+
+if os.path.exists(fileout):
+   print('%s exists. Skipping update.' % fileout)
+   exit()
 
 # -- update data
 startyear   = '1900'
@@ -187,8 +192,10 @@ for v in range(len(vars)):
     ax2.set_ylabel('Temperature ($^\circ$C)')
     plt.xlabel('Time')
 
-os.system('rm -rf '+pathin+fileout)
-plt.savefig(pathin+fileout,dpi=300)
+#os.system('rm -rf '+pathin+fileout)
+plt.savefig(fileout,dpi=300)
+if os.path.exists(linkout): os.unlink(linkout)
+os.symlink(fileout,linkout)
 
 # plt.show()
 exit()
