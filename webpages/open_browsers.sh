@@ -1,9 +1,16 @@
 #!/usr/bin/bash
 
+PID=$(ps -C chromium-browse f | awk 'NR==2 { print $1 }')
+
+if [ ! -z "$PID" ] 
+then
+   kill $PID
+fi
+
 # Open video browser
-DISPLAY=:0.0 nohup chromium-browser /home/aph28/hallwayvis/webpages/video_test.html --new-window --start-fullscreen >& /dev/null &
+DISPLAY=:0.0 nohup chromium-browser /home/aph28/hallway-vis/webpages/video.html --new-window --start-fullscreen >& /dev/null &
 # Open forecast browser
-DISPLAY=:0.0 nohup chromium-browser /home/aph28/hallwayvis/webpages/fc_test.html --new-window --start-fullscreen >& /dev/null &
+DISPLAY=:0.0 nohup chromium-browser /home/aph28/hallway-vis/webpages/fc.html --new-window --start-fullscreen >& /dev/null &
 
 sleep 5
 
