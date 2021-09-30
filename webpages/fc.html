@@ -11,6 +11,7 @@ body { margin: 0; }
 
       <script>
       sites = [
+         '/home/aph28/hallway-vis/webpages/ithaca_clim.html'
          'https://www.nrcc.cornell.edu/wxstation/ithaca/gfr_logger.html',
          'https://whirlwind.aos.wisc.edu/~wxp/goes16/wvc/goes16_namer_60.html',
          'https://dustdevil.aos.wisc.edu/goes16/grb/rgb/conus/goes16_conus.html',
@@ -20,7 +21,7 @@ body { margin: 0; }
       window.setInterval(function() {
          reloadIFrame()
       }, 600000);
-      var site = 2;
+      var site = -1;
       reloadIFrame()
 
       function reloadIFrame() {

@@ -1,0 +1,290 @@
+[
+  {
+    "name": "Washington National",
+    "state": "DC",
+    "sid": "dcathr",
+    "lon": -77.03454,
+    "lat": 38.8472,
+    "default": false
+  },
+  {
+    "name": "NYC-Central Park",
+    "state": "NY",
+    "sid": "nycthr",
+    "lon": -73.96917,
+    "lat": 40.77889,
+    "default": false
+  },
+  {
+    "name": "LaGuardia Airport",
+    "state": "NY",
+    "sid": "lgathr",
+    "lon": -73.874,
+    "lat": 40.7769,
+    "default": false
+  },
+  {
+    "name": "Kennedy Airport",
+    "state": "NY",
+    "sid": "jfkthr",
+    "lon": -73.7622,
+    "lat": 40.6386,
+    "default": false
+  },
+  {
+    "name": "Newark",
+    "state": "NJ",
+    "sid": "ewrthr",
+    "lon": -74.16944,
+    "lat": 40.6825,
+    "default": false
+  },
+  {
+    "name": "Philadelphia",
+    "state": "PA",
+    "sid": "phlthr",
+    "lon": -75.02,
+    "lat": 40.08,
+    "default": false
+  },
+  {
+    "name": "Boston Logan",
+    "state": "MA",
+    "sid": "bosthr",
+    "lon": -71.01056,
+    "lat": 42.36056,
+    "default": false
+  },
+  {
+    "name": "Wilmington",
+    "state": "DE",
+    "sid": "ilg_thr",
+    "lon": -75.60567,
+    "lat": 39.6744,
+    "default": false
+  },
+  {
+    "name": "Bridgeport",
+    "state": "CT",
+    "sid": "bdrthr",
+    "lon": -73.12889,
+    "lat": 41.15833,
+    "default": false
+  },
+  {
+    "name": "Ithaca",
+    "state": "NY",
+    "sid": "304174",
+    "lon": -76.4491,
+    "lat": 42.4491,
+    "default": true
+  },
+  {
+    "name": "Harrisburg",
+    "state": "PA",
+    "sid": "mdtthr",
+    "lon": -76.85139,
+    "lat": 40.21722,
+    "default": false
+  },
+  {
+    "name": "Baltimore",
+    "state": "MD",
+    "sid": "bwithr",
+    "lon": -76.684,
+    "lat": 39.1733,
+    "default": false
+  },
+  {
+    "name": "Islip",
+    "state": "NY",
+    "sid": "ispthr",
+    "lon": -73.10167,
+    "lat": 40.79389,
+    "default": false
+  },
+  {
+    "name": "Providence",
+    "state": "RI",
+    "sid": "pvdthr",
+    "lon": -71.43333,
+    "lat": 41.71667,
+    "default": false
+  },
+  {
+    "name": "Huntington",
+    "state": "WV",
+    "sid": "htsthr",
+    "lon": -82.555,
+    "lat": 38.365,
+    "default": false
+  },
+  {
+    "name": "Washington Dulles",
+    "state": "DC",
+    "sid": "iadthr",
+    "lon": -77.4473,
+    "lat": 38.9349,
+    "default": false
+  },
+  {
+    "name": "Charleston",
+    "state": "WV",
+    "sid": "crwthr",
+    "lon": -81.59,
+    "lat": 38.3794,
+    "default": false
+  },
+  {
+    "name": "Worcester",
+    "state": "MA",
+    "sid": "orhthr",
+    "lon": -71.8731,
+    "lat": 42.2706,
+    "default": false
+  },
+  {
+    "name": "Buffalo",
+    "state": "NY",
+    "sid": "bufthr",
+    "lon": -78.7358,
+    "lat": 42.9408,
+    "default": false
+  },
+  {
+    "name": "Allentown",
+    "state": "PA",
+    "sid": "abethr",
+    "lon": -75.44771,
+    "lat": 40.64985,
+    "default": false
+  },
+  {
+    "name": "Atlantic City",
+    "state": "NJ",
+    "sid": "acythr",
+    "lon": -74.56699,
+    "lat": 39.45202,
+    "default": false
+  },
+  {
+    "name": "Scranton",
+    "state": "PA",
+    "sid": "avpthr",
+    "lon": -75.7269,
+    "lat": 41.3336,
+    "default": false
+  },
+  {
+    "name": "Pittsburgh",
+    "state": "PA",
+    "sid": "pitthr",
+    "lon": -80.2144,
+    "lat": 40.4846,
+    "default": false
+  },
+  {
+    "name": "Hartford",
+    "state": "CT",
+    "sid": "bdlthr",
+    "lon": -72.6819,
+    "lat": 41.9375,
+    "default": false
+  },
+  {
+    "name": "Erie",
+    "state": "PA",
+    "sid": "erithr",
+    "lon": -80.1824,
+    "lat": 42.0803,
+    "default": false
+  },
+  {
+    "name": "Rochester",
+    "state": "NY",
+    "sid": "rocthr",
+    "lon": -77.6767,
+    "lat": 43.1167,
+    "default": false
+  },
+  {
+    "name": "Williamsport",
+    "state": "PA",
+    "sid": "iptthr",
+    "lon": -76.9217,
+    "lat": 41.2433,
+    "default": false
+  },
+  {
+    "name": "Syracuse",
+    "state": "NY",
+    "sid": "syrthr",
+    "lon": -76.1038,
+    "lat": 43.1111,
+    "default": false
+  },
+  {
+    "name": "Beckley",
+    "state": "WV",
+    "sid": "bkwthr",
+    "lon": -81.123,
+    "lat": 37.7836,
+    "default": false
+  },
+  {
+    "name": "Binghamton",
+    "state": "NY",
+    "sid": "bgmthr",
+    "lon": -75.98,
+    "lat": 42.2068,
+    "default": false
+  },
+  {
+    "name": "Portland",
+    "state": "ME",
+    "sid": "pwmthr",
+    "lon": -70.30444,
+    "lat": 43.64222,
+    "default": false
+  },
+  {
+    "name": "Albany",
+    "state": "NY",
+    "sid": "albthr",
+    "lon": -73.79912,
+    "lat": 42.74722,
+    "default": false
+  },
+  {
+    "name": "Burlington",
+    "state": "VT",
+    "sid": "btvthr",
+    "lon": -73.1499,
+    "lat": 44.4683,
+    "default": false
+  },
+  {
+    "name": "Elkins",
+    "state": "WV",
+    "sid": "eknthr",
+    "lon": -79.8528,
+    "lat": 38.8853,
+    "default": false
+  },
+  {
+    "name": "Concord",
+    "state": "NH",
+    "sid": "conthr",
+    "lon": -71.50274,
+    "lat": 43.2049,
+    "default": false
+  },
+  {
+    "name": "Caribou",
+    "state": "ME",
+    "sid": "carthr",
+    "lon": -68.0173,
+    "lat": 46.8705,
+    "default": false
+  }
+]
