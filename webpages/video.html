@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+   <head>
+     <title>EASAtmosVis</title>
+     <style>
+body { margin: 0; }
+video { 
+    position: fixed;
+    margin: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+}
+      </style>
+   </head>
+   <body>
+      <video id='mainVideo' preload="metadata" autoplay muted src="/home/aph28/hallwayvis/anims/test_animations/ERA5_PV_330K.mp4"> </video>
+
+      <script>
+      clipPaths = [
+         '/home/aph28/hallway-vis/anims/pot_vort_oct_2020_330K_orth.mp4',
+         '/home/aph28/hallway-vis/anims/t850_anim_latest.mp4'
+      ];
+      var vid = document.getElementById('mainVideo');
+      vid.addEventListener('ended',onVideoEnd,false);
+
+      var clip = 0;
+      vid.setAttribute('src',clipPaths[clip]);
+
+      function onVideoEnd(e) {
+         clip = (clip + 1) % clipPaths.length;
+         vid.setAttribute('src',clipPaths[clip]);
+      }
+      </script>
+
+   </body>
+</html>
+<!--
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    top: 50%;
+    left: 50%;
+
+    background-size: cover; 
+
+-->

@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+   <head>
+     <title>EASAtmosFC</title>
+     <style>
+body { margin: 0; }
+     </style>
+   </head>
+   <body>
+      <iframe id="gamefarmiframe" src="https://www.weathertap.com/hub/RAD_MOS_NAT_4KM_L2WINTER_ANI.gif" style="border:none" width="1920px" height="1024px"></iframe>
+
+      <script>
+      sites = [
+         'https://www.nrcc.cornell.edu/wxstation/ithaca/gfr_logger.html',
+         'https://www.star.nesdis.noaa.gov/GOES/fulldisk_band.php?sat=G16&band=GEOCOLOR&length=240',
+         'https://whirlwind.aos.wisc.edu/~wxp/goes16/wvc/goes16_namer_60.html',
+         'https://www.lightningmaps.org/blitzortung/america/index.php?bo_page=archive&bo_map=usa_big&bo_animation=now',
+         '/home/aph28/hallway-vis/webpages/gamefarm_climate.html'
+      ];
+      window.setInterval(function() {
+         reloadIFrame()
+      }, 10000);
+      var site = 0;
+
+      function reloadIFrame() {
+         site = (site + 1) % sites.length;
+         console.log('Loading ' + sites[site])
+         document.getElementById('gamefarmiframe').src = sites[site];
+      }
+    </script>
+   </body>
+</html>
