@@ -45,7 +45,7 @@ def anim_t8():
         #t8 = add_cyclic_point(t8,coord=t8.longitude)
         ax.set_extent((-157,0,0,90))
 
-        ax.contourf(t8.longitude,t8.latitude,t8,norm=newnorm,cmap=newcmap,levels=range(-40,40,1),alpha=0.7,transform=ccrs.PlateCarree())
+        ax.contourf(t8.longitude,t8.latitude,t8,norm=newnorm,cmap=newcmap,levels=range(-40,40,1),transform=ccrs.PlateCarree())
         ax.contour(t8.longitude,t8.latitude,t8,levels=[0],colors=['blue'],transform=ccrs.PlateCarree())
 
         ax.set_title('850hPa Temperature (C)',fontsize=11)

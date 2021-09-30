@@ -1,7 +1,7 @@
 #
 # exec(open("ithaca_temperature_annual_cycle.py").read())
 
-import os
+import os, sys
 import numpy as np
 import pandas as pd
 import datetime
@@ -39,7 +39,7 @@ linkout     = pathout + 'ithaca_temperature_annual_cycle_fcst_subplots_latest.pn
 
 if os.path.exists(fileout):
    print('%s exists. Skipping update.' % fileout)
-   exit()
+   sys.exit()
 
 # -- update data
 startyear   = '1900'
@@ -196,6 +196,3 @@ for v in range(len(vars)):
 plt.savefig(fileout,dpi=300)
 if os.path.exists(linkout): os.unlink(linkout)
 os.symlink(fileout,linkout)
-
-# plt.show()
-exit()

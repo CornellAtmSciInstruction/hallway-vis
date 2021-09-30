@@ -7,11 +7,11 @@ ANIMROOT=$VISROOT/animate
 LOGPATH=$(date +"/scratch/EASvis/logs/%Y%m%d_%H%M/")
 mkdir -p $LOGPATH
 
-echo "Processing script run; output logged to $LOGROOT."
+echo "Processing script run; output logged to $LOGPATH"
 
 # start off sequence of scripts outputting to appropriate log files
 echo "Fetching GFS data."
-$SCRIPTROOT/wrangle_gfs.sh >& ${LOGROOT}_wrangle_gfs.txt 
+$SCRIPTROOT/wrangle_gfs.sh >& ${LOGPATH}_wrangle_gfs.txt
 
 echo "Processing grib data to netcdfs."
 # GFS forecasts
@@ -30,5 +30,5 @@ export PATH=$PATH:/opt/anaconda/bin; source activate adm; python $ANIMROOT/anim_
 export PATH=$PATH:/opt/anaconda/bin; source activate adm; python $VISROOT/gamefarm_climate/ithaca_temperature_annual_cycle_fcst_subplots_for_hallway_vis.py >& ${LOGPATH}gamefarm_clim.txt
 
 # TODO: copy animations to pi
-$SCRIPTROOT/copyanims.sh >& ${LOGROOT}_copyanims.txt
+$SCRIPTROOT/copyanims.sh >& ${LOGPATH}_copyanims.txt
 
