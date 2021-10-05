@@ -12,6 +12,39 @@ def get_gribpath(day, hour):
 def get_ncpath(day, hour):
    return arch_root + '%s/%s/netcdf/' % (day, hour)
 
+def process_isobaric_level(gribfn, ncfn, var, plev):
+# {{{
+   vname = var + '%d' % plev
+
+   gribkwa = dict(filter_by_keys = dict(typeOfLevel = 'isobaricInhPa', \
+                                        shortName=var))
+
+   ds = xr.open_dataset(gribfn, engine='cfgrib', backend_kwargs=gribkwa)
+
+   v = ds.data_vars[var].sel(isobaricInhPa = plev).rename(vname)
+
+   enc = {vname : dict(dtype="float32", zlib=True, complevel=9)}
+
+   print("Writing to %s" % ncfn)
+   v.to_netcdf(ncfn, encoding=enc)
+# }}}
+
+def process_pwat(gribfn, ncfn):
+# {{{
+   vname = 'pwat'
+
+   gribkwa = dict(filter_by_keys = dict(cfVarName = 'pwat'))
+
+   ds = xr.open_dataset(gribfn, engine='cfgrib', backend_kwargs=gribkwa)
+
+   var = ds.pwat.rename(vname)
+
+   enc = {vname : dict(dtype="float32", zlib=True, complevel=9)}
+
+   print("Writing to %s" % ncfn)
+   var.to_netcdf(ncfn, encoding=enc)
+# }}}
+
 def process_gfs_to_nc(day, hour):
 # {{{
    gribpath = get_gribpath(day, hour)
@@ -28,7 +61,7 @@ def process_gfs_to_nc(day, hour):
 
    for gribfn in filelist:
       #################################
-      # Extract isobaric data
+      # Extract single-level isobaric data
       #############
       fcstep = gribfn[-3:]
 
@@ -37,20 +70,10 @@ def process_gfs_to_nc(day, hour):
          plfn = ncpath + 'gfs.t%sz.%s.0p25.f%s.nc' % (hour, vname, fcstep)
 
          if not os.path.exists(plfn):
-            print("Writing to %s" % plfn)
-            gribkwa = dict(filter_by_keys = dict(typeOfLevel = 'isobaricInhPa', \
-                                                 shortName=v))
-
-            ds = xr.open_dataset(gribfn, engine='cfgrib', backend_kwargs=gribkwa)
-
-            var = ds.data_vars[v].sel(isobaricInhPa = pr).rename(vname)
-
-            enc = {vname : dict(dtype="float32", zlib=True, complevel=9)}
-
-            var.to_netcdf(plfn, encoding=enc)
-         else:
-            pass
-            #print('Skipped %s.' % plfn)
+            try:
+               process_isobaric_level(gribfn, plfn, v, pr)
+            except Exception as e:
+               print("Failed to process single-level %s. Exception: '%s'" % (v, e))
 
       #################################
       # Extract precipitable water
@@ -59,19 +82,10 @@ def process_gfs_to_nc(day, hour):
       vfn = ncpath + 'gfs.t%sz.%s.0p25.f%s.nc' % (hour, vname, fcstep)
 
       if not os.path.exists(vfn):
-         print("Writing to %s" % vfn)
-         gribkwa = dict(filter_by_keys = dict(cfVarName = 'pwat'))
-
-         ds = xr.open_dataset(gribfn, engine='cfgrib', backend_kwargs=gribkwa)
-
-         var = ds.pwat.rename(vname)
-
-         enc = {vname : dict(dtype="float32", zlib=True, complevel=9)}
-
-         var.to_netcdf(vfn, encoding=enc)
-      else:
-         pass
-         #print('Skipped %s.' % plfn)
+         try:
+            process_pwat(gribfn, vfn)
+         except Exception as e:
+            print("Failed to process precipitable water. Exception: '%s'" % (e,))
 # }}}
 
 def clean_gribs(day, hour, days_old):
@@ -150,7 +164,7 @@ def scan_archive():
          
       except:
          print("Path %s not recognized as a date; skipping." % path)
-         raise
+         continue
 
       # Work out how many days old this path is
       pathdate = datetime.date(yr, mn, dy)

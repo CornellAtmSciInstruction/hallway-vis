@@ -3,32 +3,60 @@ VISROOT=/scratch/EASvis
 SCRIPTROOT=$VISROOT/wrangle
 ANIMROOT=$VISROOT/animate
 
+START=$SECONDS
+
+shopt -s expand_aliases
+alias Python='export PATH=$PATH:/opt/anaconda/bin; source activate adm; python'
+
 # Create new directory for logs
 LOGPATH=$(date +"/scratch/EASvis/logs/%Y%m%d_%H%M/")
 mkdir -p $LOGPATH
 
-echo "Processing script run; output logged to $LOGPATH"
+echo "------------------------------------------------"
+echo "Processing script run; logged to $LOGPATH"
 
 # start off sequence of scripts outputting to appropriate log files
-echo "Fetching GFS data."
-$SCRIPTROOT/wrangle_gfs.sh >& ${LOGPATH}_wrangle_gfs.txt
 
+# ------------------------------------------------------
+# -- Fetch data
+echo "Fetching GFS data."
+$SCRIPTROOT/wrangle_gfs.sh >& ${LOGPATH}wrangle_gfs.txt &
+
+wait
+
+# ------------------------------------------------------
+# -- Process raw data to netcdfs
 echo "Processing grib data to netcdfs."
+
 # GFS forecasts
-export PATH=$PATH:/opt/anaconda/bin; source activate adm; python $SCRIPTROOT/process_archive.py >& ${LOGPATH}process_gfs_forecast.txt
+Python $SCRIPTROOT/process_archive.py >& ${LOGPATH}process_gfs_forecast.txt &
 
 # GFS analysis
-export PATH=$PATH:/opt/anaconda/bin; source activate adm; python $SCRIPTROOT/process_gfs_analysis.py >& ${LOGPATH}process_gfs_analysis.txt
+Python $SCRIPTROOT/process_gfs_analysis.py >& ${LOGPATH}process_gfs_analysis.txt &
 
-# TODO: parallelize animations?
+wait
+
+# ------------------------------------------------------
+# -- Produce animations/graphics
 echo "Producing animations."
 
 # T 850 animation
-export PATH=$PATH:/opt/anaconda/bin; source activate adm; python $ANIMROOT/anim_t8.py >& ${LOGPATH}anim_t8.txt
+Python $ANIMROOT/anim_t8.py >& ${LOGPATH}anim_t8.txt &
 
 # gamefarm road animation
-export PATH=$PATH:/opt/anaconda/bin; source activate adm; python $VISROOT/gamefarm_climate/ithaca_temperature_annual_cycle_fcst_subplots_for_hallway_vis.py >& ${LOGPATH}gamefarm_clim.txt
+Python $VISROOT/gamefarm_climate/ithaca_temperature_annual_cycle_fcst_subplots_for_hallway_vis.py >& ${LOGPATH}gamefarm_clim.txt &
 
-# TODO: copy animations to pi
-$SCRIPTROOT/copyanims.sh >& ${LOGPATH}_copyanims.txt
+wait
 
+# ------------------------------------------------------
+# -- Transfer to hallway pi
+echo "Copying graphics to pi."
+$SCRIPTROOT/copyanims.sh >& ${LOGPATH}copyanims.txt
+
+# ------------------------------------------------------
+# -- Print summary
+
+END=$(date +"%Y%m%d_%H%M")
+ELAPSED=$(date -u -d "0 $SECONDS seconds - $START seconds" +"%H:%M:%S" )
+
+echo "Processing completed at ${END}. ${ELAPSED} elapsed." 

@@ -29,8 +29,22 @@ def anim_t8():
     f = plt.figure(1, figsize = (8, 4), dpi = 96, tight_layout=True)
     f.clf()
 
+    # Open first netcdf to get coordinates
+    ncfile = ncpath + 'gfs.t%sz.t850.0p25.f000.nc' % (hour,)
+    ds = xr.open_dataset(ncfile)
+
+    # Pre transform lat and lon grid
+    srcproj = ccrs.PlateCarree(central_longitude=0.)
+    dstproj = ccrs.PlateCarree()
+    #dstproj = ccrs.LambertConformal()
+    slon = ds.longitude.data
+    slat = ds.latitude.data
+    slon, slat = np.meshgrid(ds.longitude.data, ds.latitude.data)
+    xform = dstproj.transform_points(srcproj, slon, slat)
+    dlon, dlat = xform[..., 0], xform[..., 1]
+
     # Create plot that can handle geographical data
-    ax = f.add_subplot(111, projection = ccrs.PlateCarree())  # Add axes to figure
+    ax = f.add_subplot(111, projection = dstproj)  # Add axes to figure
 
     def make_frame(i):
         print(i)
@@ -41,12 +55,13 @@ def anim_t8():
         ncfile = ncpath + 'gfs.t%sz.t850.0p25.f%03d.nc' % (hour, i)
         ds = xr.open_dataset(ncfile)
 
-        t8 = ds['t850'] - 273.15
+        t8 = ds['t850'].data - 273.15
         #t8 = add_cyclic_point(t8,coord=t8.longitude)
-        ax.set_extent((-157,0,0,90))
+        ax.set_extent((-157,-3,10,70), crs=srcproj)
 
-        ax.contourf(t8.longitude,t8.latitude,t8,norm=newnorm,cmap=newcmap,levels=range(-40,40,1),transform=ccrs.PlateCarree())
-        ax.contour(t8.longitude,t8.latitude,t8,levels=[0],colors=['blue'],transform=ccrs.PlateCarree())
+        #ax.contourf(dlon, dlat, t8, norm=newnorm, cmap=newcmap, levels=range(-40,40,1))
+        ax.contourf(dlon[:, 721:], dlat[:, 721:], t8[:, 721:], norm=newnorm, cmap=newcmap, levels=range(-40,40,1))
+        ax.contour(dlon[:, 721:], dlat[:, 721:], t8[:, 721:], levels=[0],colors=['blue'])
 
         ax.set_title('850hPa Temperature (C)',fontsize=11)
         #ax.set_title('Valid: '+dtfs,loc='right',fontsize=8)
