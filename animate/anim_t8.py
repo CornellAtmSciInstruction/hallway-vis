@@ -26,7 +26,7 @@ newnorm = Normalize(-44,48)
 
 def anim_t8():
     plt.ioff()
-    f = plt.figure(1, figsize = (8, 4), dpi = 96, tight_layout=True)
+    f = plt.figure(1, figsize = (8, 4.5), dpi = 96, tight_layout=True)
     f.clf()
 
     # Open first netcdf to get coordinates
@@ -78,7 +78,7 @@ def anim_t8():
 
     print('Writing animation to %s.' % animfn)
    
-    anim.save(animfn, fps=12, codec='h264')
+    anim.save(animfn, fps=12, codec='h264', dpi=240.)
     plt.ion()
 
 import os
