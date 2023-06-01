@@ -45,6 +45,22 @@ def process_pwat(gribfn, ncfn):
    var.to_netcdf(ncfn, encoding=enc)
 # }}}
 
+def process_prmsl(gribfn, ncfn):
+# {{{
+   vname = 'prmsl'
+
+   gribkwa = dict(filter_by_keys = dict(cfVarName = 'prmsl'))
+
+   ds = xr.open_dataset(gribfn, engine='cfgrib', backend_kwargs=gribkwa)
+
+   var = ds.prmsl.rename(vname)
+
+   enc = {vname : dict(dtype="float32", zlib=True, complevel=9)}
+
+   print("Writing to %s" % ncfn)
+   var.to_netcdf(ncfn, encoding=enc)
+# }}}
+
 def process_gfs_to_nc(day, hour):
 # {{{
    gribpath = get_gribpath(day, hour)
@@ -57,7 +73,7 @@ def process_gfs_to_nc(day, hour):
    filelist = glob.glob(gribpath + '*f???')
    filelist.sort()
 
-   plev_vars = {'t': 850}
+   plev_vars = {'t': 850, 'gh': 500}
 
    for gribfn in filelist:
       #################################
@@ -86,6 +102,18 @@ def process_gfs_to_nc(day, hour):
             process_pwat(gribfn, vfn)
          except Exception as e:
             print("Failed to process precipitable water. Exception: '%s'" % (e,))
+
+      #################################
+      # Extract mean sea-level pressure
+      #############
+      vname = 'prmsl'
+      vfn = ncpath + 'gfs.t%sz.%s.0p25.f%s.nc' % (hour, vname, fcstep)
+
+      if not os.path.exists(vfn):
+         try:
+            process_prmsl(gribfn, vfn)
+         except Exception as e:
+            print("Failed to process mean sea-level pressure. Exception: '%s'" % (e,))
 # }}}
 
 def clean_gribs(day, hour, days_old):

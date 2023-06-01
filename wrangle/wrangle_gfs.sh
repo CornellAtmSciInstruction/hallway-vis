@@ -28,9 +28,10 @@ fetch_date() {
       mkdir -p $LOCALPATH
 
       # Check if forecasts are available
-      if gsutil -q stat gs://global-forecast-system/gfs.$DATE/$HOUR/atmos/gfs.t${HOUR}z.pgrb2.0p25.f001 ; then
+      if gsutil -q stat gs://global-forecast-system/gfs.$DATE/$HOUR/atmos/gfs.t${HOUR}z.pgrb2.0p25.f120 ; then
          # Copy any forecast files not currently present
          gsutil cp -n gs://global-forecast-system/gfs.$DATE/$HOUR/atmos/gfs.t${HOUR}z.pgrb2.0p25.f0?? $LOCALPATH
+         gsutil cp -n gs://global-forecast-system/gfs.$DATE/$HOUR/atmos/gfs.t${HOUR}z.pgrb2.0p25.f1[0-2]? $LOCALPATH
       fi
    done
 }
