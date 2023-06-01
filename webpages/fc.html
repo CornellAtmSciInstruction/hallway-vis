@@ -12,22 +12,25 @@ body { margin: 0; }
 
       <script>
       sites = [
-         'http://squall2.nrcc.cornell.edu/gauges/#304174',
+         'http://127.0.0.1:9000/gauges/gauges.html',
+         '/home/aph28/hallway-vis/webpages/gamefarm_climate.html',
          'https://whirlwind.aos.wisc.edu/~wxp/goes16/wvc/goes16_namer_60.html',
          'https://dustdevil.aos.wisc.edu/goes16/grb/rgb/conus/goes16_conus.html',
-         'https://www.lightningmaps.org/blitzortung/america/index.php?bo_page=archive&bo_map=usa_big&bo_animation=now',
-         '/home/aph28/hallway-vis/webpages/gamefarm_climate.html'
+         'https://earth.nullschool.net/#current/wind/isobaric/700hPa/orthographic=-61.91,31.82,436',
+         'https://earth.nullschool.net/#current/wind/isobaric/700hPa/orthographic=44.28,-92.84,436',
+         'https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=total_precipitable_water/orthographic=199.79,14.60,436/loc=-161.553,-12.292'
+//       'https://www.lightningmaps.org/blitzortung/america/index.php?bo_page=archive&bo_map=usa_big&bo_animation=now',
       ];
       window.setInterval(function() {
          reloadIFrame()
       }, 600000);
-      var site = -1;
+      var site = 4;
       reloadIFrame()
 
       function reloadIFrame() {
-         site = (site + 1) % sites.length;
          console.log('Loading ' + sites[site])
          document.getElementById('gamefarmiframe').src = sites[site];
+         site = (site + 1) % sites.length;
       }
     </script>
    </body>
