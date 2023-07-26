@@ -1,4 +1,5 @@
 #! /usr/bin/bash
+# https://console.cloud.google.com/storage/browser/global-forecast-system;tab=objects?prefix=&forceOnObjectsSortingFiltering=false
 
 # Add path to Google cloud utility script
 PATH=/scratch/EASvis/gsutil:$PATH
