@@ -181,15 +181,14 @@ def anim_z500():
     plt.ion()
 
 import os
-animfn = 'test_z500.mp4'
-anim_z500()
+#animfn = 'test_z500.mp4'
 
-#if os.path.exists(animfn):
-    #print('%s already exists; skipping.' % animfn)
-#else:
-    #anim_z500()
+if os.path.exists(animfn):
+    print('%s already exists; skipping.' % animfn)
+else:
+    anim_z500()
 
-#lnk = tools.make_anim_symlink(title)
-#if os.path.lexists(lnk): os.unlink(lnk)
-#os.symlink(animfn, lnk)
+lnk = tools.make_anim_symlink(title)
+if os.path.lexists(lnk): os.unlink(lnk)
+os.symlink(animfn, lnk)
 

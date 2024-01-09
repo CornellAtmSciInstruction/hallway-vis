@@ -184,15 +184,14 @@ def anim_t8():
     plt.ion()
 
 import os
-animfn = 'test_t850_pc.mp4'
 if os.path.exists(animfn):
-    #print('%s already exists; skipping.' % animfn)
-    anim_t8()
+    print('%s already exists; skipping.' % animfn)
+    #anim_t8()
 else:
     anim_t8()
 
-#lnk = tools.make_anim_symlink(title)
-#if os.path.lexists(lnk): os.unlink(lnk)
-#os.symlink(animfn, lnk)
+lnk = tools.make_anim_symlink(title)
+if os.path.lexists(lnk): os.unlink(lnk)
+os.symlink(animfn, lnk)
 
 # Add lakes, country boundaries, state boundaries, cities? (Ithaca at least)

@@ -46,6 +46,9 @@ Python $ANIMROOT/anim_t8.py >& ${LOGPATH}anim_t8.txt &
 # Z 500 animation
 Python $ANIMROOT/anim_z500.py >& ${LOGPATH}anim_z5.txt &
 
+# Precipitable water animation
+Python $ANIMROOT/anim_pwat.py >& ${LOGPATH}anim_pw.txt &
+
 # gamefarm road animation
 Python $VISROOT/gamefarm_climate/ithaca_temperature_annual_cycle_fcst_subplots_for_hallway_vis.py >& ${LOGPATH}gamefarm_clim.txt &
 
